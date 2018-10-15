@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Media.SpeechSynthesis;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -22,9 +23,37 @@ namespace VoiceText
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        List<VoiceInformation> voiceInformationList = new List<VoiceInformation>();
+        List<string> vs = new List<string>();
         public MainPage()
         {
             this.InitializeComponent();
+            foreach (var item in SpeechSynthesizer.AllVoices)
+            {
+                voiceInformationList.Add(item);
+                vs.Add(item.DisplayName);
+            }
+            Select.ItemsSource = vs;
+        }
+
+        private async void Text_Click(object sender, RoutedEventArgs e)
+        {
+            VoiceInformation voice ;
+            foreach (var item in voiceInformationList)
+            {
+                if(item.DisplayName==Select.SelectedItem.ToString())
+                {
+                 voice = item;
+                    string str = Content.Text;
+                    SpeechSynthesizer synthesizer = new SpeechSynthesizer();
+                    synthesizer.Voice = voice;
+                    SpeechSynthesisStream stream = await synthesizer.SynthesizeTextToStreamAsync(str);
+                    Me.SetSource(stream, stream.ContentType);
+                    Me.Play();
+                }
+            }
+         
+           
         }
     }
 }

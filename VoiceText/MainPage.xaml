@@ -9,6 +9,13 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-
+        <StackPanel>
+            <ComboBox Width="400" x:Name="Select">
+            </ComboBox>
+            <TextBox x:Name="Content"/>
+            <Button Content="测试" x:Name="Text" Click="Text_Click"/>
+            <MediaElement x:Name="Me">
+            </MediaElement>
+        </StackPanel>
     </Grid>
 </Page>
