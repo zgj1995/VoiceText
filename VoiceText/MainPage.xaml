@@ -10,8 +10,12 @@
 
     <Grid>
         <StackPanel>
-            <ComboBox Width="400" x:Name="Select">
-            </ComboBox>
+            <StackPanel Orientation="Horizontal">
+                <ComboBox Width="400" x:Name="Select">
+                </ComboBox>
+                <ComboBox Width="400" x:Name="Select2">
+                </ComboBox>
+            </StackPanel>
             <TextBox x:Name="Content"/>
             <Button Content="测试" x:Name="Text" Click="Text_Click"/>
             <MediaElement x:Name="Me">

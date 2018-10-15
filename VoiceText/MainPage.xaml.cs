@@ -25,6 +25,9 @@ namespace VoiceText
     {
         List<VoiceInformation> voiceInformationList = new List<VoiceInformation>();
         List<string> vs = new List<string>();
+        IDictionary<string, string> text = new Dictionary<string, string>();
+       
+        List<string> lan = new List<string>() { "中文欢迎}", "英文欢迎" };
         public MainPage()
         {
             this.InitializeComponent();
@@ -33,18 +36,45 @@ namespace VoiceText
                 voiceInformationList.Add(item);
                 vs.Add(item.DisplayName);
             }
+            text.Add("中文欢迎","zh-CN");
+            text.Add("英文欢迎","en-US");
+            Select2.ItemsSource = text.Keys;
+            Select2.SelectedIndex = 0;
             Select.ItemsSource = vs;
+            Select.SelectedIndex = 0;
         }
 
         private async void Text_Click(object sender, RoutedEventArgs e)
         {
+           var a= Select2.SelectedItem;
+            string lan=text[Select2.SelectedItem.ToString()];
             VoiceInformation voice ;
             foreach (var item in voiceInformationList)
             {
-                if(item.DisplayName==Select.SelectedItem.ToString())
+                if(item.DisplayName==Select.SelectedItem.ToString()&&item.Language==lan)
                 {
                  voice = item;
-                    string str = Content.Text;
+                    string str ="欢迎 "+ Content.Text;
+                    SpeechSynthesizer synthesizer = new SpeechSynthesizer();
+                    synthesizer.Voice = voice;
+                    SpeechSynthesisStream stream = await synthesizer.SynthesizeTextToStreamAsync(str);
+                    Me.SetSource(stream, stream.ContentType);
+                    Me.Play();
+                }
+                else if(item.DisplayName == Select.SelectedItem.ToString() && item.Language == "en-US")
+                {
+                    voice = item;
+                    string str = "Welcome " + Content.Text;
+                    SpeechSynthesizer synthesizer = new SpeechSynthesizer();
+                    synthesizer.Voice = voice;
+                    SpeechSynthesisStream stream = await synthesizer.SynthesizeTextToStreamAsync(str);
+                    Me.SetSource(stream, stream.ContentType);
+                    Me.Play();
+                }
+                else if(item.DisplayName == Select.SelectedItem.ToString()&& item.Language == "zh-TW")
+                {
+                    voice = item;
+                    string str = "欢迎" + Content.Text;
                     SpeechSynthesizer synthesizer = new SpeechSynthesizer();
                     synthesizer.Voice = voice;
                     SpeechSynthesisStream stream = await synthesizer.SynthesizeTextToStreamAsync(str);
